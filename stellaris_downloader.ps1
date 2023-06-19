@@ -19,6 +19,8 @@ if (-not (Test-Path -Path $modFolderLocation -PathType Container)) {
   exit
 }
 
+Write-Host "Found Stellaris mod folder at: $modFolderLocation " -ForegroundColor Green
+
 if (-not $modAppId) {
     # The variable is null or not set
     Write-Host "No Mod ID given to download. Try again: stellaris_downloader.bat <app-id>" -ForegroundColor Red
@@ -139,6 +141,7 @@ Copy-Item -Path $descriptorPath -Destination $descriptorTargetLocation
 Write-Host "Copying And Updating Descriptor"
 # Add to descriptor path= property specifying full path.
 $absoluteModFolderPath = Convert-Path -Path $targetModFolder
+$absoluteModFolderPath = $absoluteModFolderPath.Replace('\', '/') # Else stellaris mod manager won't like it.
 $lineToAdd = 'path="{0}"' -f $absoluteModFolderPath
 
 Add-Content -Path $descriptorTargetLocation -Value "`n$lineToAdd"
