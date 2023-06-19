@@ -16,7 +16,7 @@ $modFolderLocation = "$documentsPath\Paradox Interactive\Stellaris\mod"
 # Ensure that mod folder exists.
 if (-not (Test-Path -Path $modFolderLocation -PathType Container)) {
   Write-Host "Stellaris Mod Path folder not found. Manually create mod folder or update script to point to right folder." -ForegroundColor Red
-  exit
+  exit 1
 }
 
 Write-Host "Found Stellaris mod folder at: $modFolderLocation " -ForegroundColor Green
@@ -24,13 +24,13 @@ Write-Host "Found Stellaris mod folder at: $modFolderLocation " -ForegroundColor
 if (-not $modAppId) {
     # The variable is null or not set
     Write-Host "No Mod ID given to download. Try again: stellaris_downloader.bat <app-id>" -ForegroundColor Red
-    exit
+    exit 1
 }
 
-if (-not [int]::TryParse($modAppId, [ref]$null)) {
+if (-not [decimal]::TryParse($modAppId, [ref]$null)) {
     # The value is an integer
-    Write-Host "Invalid mod ID given. Ensure it is an integer. Not an url. Example: 1623423360" -ForegroundColor Red
-    exit
+    Write-Host "Invalid mod ID '$modAppId' given. Ensure it is an integer. Not an url. Example: 1623423360" -ForegroundColor Red
+    exit 1
 }
 
 Write-Host "Attempting to download mod with id: $modAppId"
@@ -71,7 +71,7 @@ $downloadedModPath = "$SteamCmdDir\steamapps\workshop\content\$StellarisAppId\$m
 
 if (-not (Test-Path -Path $downloadedModPath -PathType Container)) {
     Write-Host "Could not download mod with id $modAppId. Please check the ID or your internet connection." -ForegroundColor Red
-    exit
+    exit 1
 }
 
 # ===================
@@ -96,7 +96,7 @@ if ($match.Success) {
 }
 else {
     Write-Host "Unable to properly parse descriptor.mod"
-    exit
+    exit 1
 }
 
 # ===================
@@ -120,7 +120,7 @@ if (Test-Path -Path $targetModFolder -PathType Container) {
             Write-Host "Stopping." -ForegroundColor Red
             Write-Host "Cleaning up downloaded folder from steamCMD..." -ForegroundColor Red
             Remove-Item -Path $downloadedModPath -Recurse -Force
-            exit
+            exit 1
         }
     } else {
         Write-Host "Deleting due to -f parameter." -ForegroundColor Yellow
@@ -156,3 +156,5 @@ Remove-Item -Path $downloadedModPath -Recurse -Force
 
 
 Write-Host "Done. Successfully added: $name" -ForegroundColor Green
+
+exit 0
