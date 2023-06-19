@@ -71,6 +71,21 @@ $downloadedModPath = "$SteamCmdDir\steamapps\workshop\content\$StellarisAppId\$m
 
 if (-not (Test-Path -Path $downloadedModPath -PathType Container)) {
     Write-Host "Could not download mod with id $modAppId. Please check the ID or your internet connection." -ForegroundColor Red
+    Write-Host "If you're sure the ModID is correct, and your connection is alright then it might not be publicly accessible to download via anonymous login." -ForegroundColor Yellow
+    Write-Host "Try manually logging in via steamcmd: " -ForegroundColor Yellow
+    Write-Host "====== ManualSteps ======= " -ForegroundColor Yellow
+    Write-Host ">>> .\steamcmd\steamcmd.exe" -ForegroundColor White
+    Write-Host "Once in the steam command line input the following command: (replace <username> for your real steam username)" -ForegroundColor Blue
+    Write-Host "Steam>" -ForegroundColor White -NoNewLine
+    Write-Host "login" -NoNewLine
+    Write-Host " <username>" -ForegroundColor Blue
+    Write-Host "Once logged in, try running the script again: " -ForegroundColor Blue
+    Write-Host ".\stellaris_downloader.bat $modAppId" -ForegroundColor white
+    Write-Host "If it still fails, try downloading manually directly via steamCMD (while logged in): " -ForegroundColor Yellow
+    Write-Host "Steam>" -ForegroundColor White -NoNewLine
+    Write-Host "workshop_download_item $StellarisAppId $modAppId"
+    Write-Host "=====================" -ForegroundColor Yellow
+    Write-Host "Could not download mod with id $modAppId. See above for more info." -ForegroundColor Red
     exit 1
 }
 
