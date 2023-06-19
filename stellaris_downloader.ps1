@@ -11,7 +11,7 @@ $SteamCmdDir = "steamcmd"
 $StellarisAppId = "281990"
 
 $documentsPath = [Environment]::GetFolderPath('MyDocuments')
-$modFolderLocation = ".\Paradox Interactive\Stellaris\mod"
+$modFolderLocation = "$documentsPath\Paradox Interactive\Stellaris\mod"
 
 # Ensure that mod folder exists.
 if (-not (Test-Path -Path $modFolderLocation -PathType Container)) {
