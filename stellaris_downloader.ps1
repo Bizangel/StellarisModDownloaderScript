@@ -98,6 +98,10 @@ $descriptorPath = "$downloadedModPath\descriptor.mod"
 
 # Read the contents of the file
 $fileContent = Get-Content $descriptorPath -Raw
+
+# Some descriptors already include a path, which would break, so remove path.
+$fileContent = $fileContent -replace 'path=".*"\n?', ''
+
 # Use regular expressions to find the name value
 $match = [regex]::Match($fileContent, 'name="([^"]+)"')
 
@@ -149,11 +153,12 @@ if (Test-Path -Path $targetModFolder -PathType Container) {
 Copy-Item -Path $downloadedModPath -Destination $targetModFolder -Recurse
 Write-Host "Succesfully copied mod folder!"
 
-# Copy descriptor
+# Write descriptor
 $descriptorTargetLocation = "${modFolderLocation}\${mod_path_name}.mod"
-Copy-Item -Path $descriptorPath -Destination $descriptorTargetLocation
+$fileContent | Set-Content -Path $descriptorTargetLocation
 
 Write-Host "Copying And Updating Descriptor"
+
 # Add to descriptor path= property specifying full path.
 $absoluteModFolderPath = Convert-Path -Path $targetModFolder
 $absoluteModFolderPath = $absoluteModFolderPath.Replace('\', '/') # Else stellaris mod manager won't like it.
